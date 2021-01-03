@@ -53,7 +53,7 @@ func _physics_process(delta):
 #		target_rot.z += -PI
 #		target_rot.y = PI - target_rot.y
 #		print("rot conversion")
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 #	if target_rot.z >= 0.44*TAU:
 #		target_rot.z = 0
 #		print("tau flip")
