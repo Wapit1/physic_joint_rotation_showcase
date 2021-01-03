@@ -1,4 +1,3 @@
-Screenshots
-===========
-![Screenshot 1](screenshots/screenshot1.jpg)
-![Screenshot 2](screenshots/screenshot2.jpg)
+built to showcase how to make joint rotate
+
+started from the 3D rotate template
