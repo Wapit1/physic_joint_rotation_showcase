@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://rotate.gd" type="Script" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://equillibrium_point.gd" type="Script" id=4]
 [ext_resource path="res://angular_limit.gd" type="Script" id=5]
 [ext_resource path="res://apply_torque.gd" type="Script" id=6]
+[ext_resource path="res://PID_apply_torque.gd" type="Script" id=7]
 
 [sub_resource type="PrismMesh" id=1]
 
@@ -30,24 +31,25 @@ albedo_color = Color( 0.521569, 0.109804, 0.803922, 1 )
 albedo_color = Color( 0.592157, 0.239216, 0.858824, 1 )
 
 [sub_resource type="SpatialMaterial" id=9]
-albedo_color = Color( 0.772549, 0.862745, 0.137255, 1 )
 
 [sub_resource type="SpatialMaterial" id=10]
-albedo_color = Color( 0.796078, 0.768627, 0.0862745, 1 )
+albedo_color = Color( 0.772549, 0.862745, 0.137255, 1 )
 
 [sub_resource type="SpatialMaterial" id=11]
-albedo_color = Color( 0.105882, 0.482353, 0.0431373, 1 )
+albedo_color = Color( 0.796078, 0.768627, 0.0862745, 1 )
 
 [sub_resource type="SpatialMaterial" id=12]
+albedo_color = Color( 0.105882, 0.482353, 0.0431373, 1 )
+
+[sub_resource type="SpatialMaterial" id=13]
 albedo_color = Color( 0.0901961, 0.439216, 0.0392157, 1 )
 
-[sub_resource type="BoxShape" id=13]
+[sub_resource type="BoxShape" id=14]
 
 [node name="Main" type="StaticBody"]
 script = ExtResource( 2 )
 
 [node name="Direct" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0 )
 script = ExtResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Direct"]
@@ -66,7 +68,7 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="motor" type="RigidBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0 )
 mass = 0.01
 gravity_scale = 0.0
 can_sleep = false
@@ -141,6 +143,42 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 1 )
 mesh = SubResource( 4 )
 material/0 = null
 
+[node name="PID apply_torque" type="RigidBody" parent="."]
+mass = 0.1
+gravity_scale = 0.0
+can_sleep = false
+script = ExtResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="PID apply_torque"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -0.410128, 0, 1, -1.79273e-08, 0, 0, 1.43858 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 9 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="PID apply_torque"]
+transform = Transform( 0.36975, 0, 0, 0, 0.301528, 0, 0, 0, 1.3304, 0, 0, -0.407867 )
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="PID apply_torque"]
+shape = SubResource( 6 )
+
+[node name="Generic6DOFJoint" type="Generic6DOFJoint" parent="PID apply_torque"]
+nodes/node_a = NodePath("../..")
+nodes/node_b = NodePath("..")
+angular_limit_x/enabled = false
+angular_spring_x/stiffness = 0.1
+angular_spring_x/damping = 0.005
+angular_limit_y/enabled = false
+angular_spring_y/enabled = true
+angular_spring_y/stiffness = 0.1
+angular_spring_y/damping = 0.01
+angular_limit_z/enabled = false
+
+[node name="MeshInstance3" type="MeshInstance" parent="PID apply_torque"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 1 )
+mesh = SubResource( 4 )
+material/0 = null
+
 [node name="angular_limit" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0 )
 mass = 0.01
@@ -151,12 +189,12 @@ script = ExtResource( 5 )
 [node name="MeshInstance" type="MeshInstance" parent="angular_limit"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -0.410128, 0, 1, -1.79273e-08, 0, 0, 1.43858 )
 mesh = SubResource( 1 )
-material/0 = SubResource( 9 )
+material/0 = SubResource( 10 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="angular_limit"]
 transform = Transform( 0.36975, 0, 0, 0, 0.301528, 0, 0, 0, 1.3304, 0, 0, -0.407867 )
 mesh = SubResource( 3 )
-material/0 = SubResource( 10 )
+material/0 = SubResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="angular_limit"]
 shape = SubResource( 6 )
@@ -179,6 +217,7 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="AngularEquilibriumPoint2" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0 )
 mass = 0.01
 gravity_scale = 0.0
 can_sleep = false
@@ -188,12 +227,12 @@ rot_damping = 0.01
 [node name="MeshInstance" type="MeshInstance" parent="AngularEquilibriumPoint2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -0.410128, 0, 1, -1.79273e-08, 0, 0, 1.43858 )
 mesh = SubResource( 1 )
-material/0 = SubResource( 11 )
+material/0 = SubResource( 12 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="AngularEquilibriumPoint2"]
 transform = Transform( 0.36975, 0, 0, 0, 0.301528, 0, 0, 0, 1.3304, 0, 0, -0.407867 )
 mesh = SubResource( 3 )
-material/0 = SubResource( 12 )
+material/0 = SubResource( 13 )
 
 [node name="CollisionShape" type="CollisionShape" parent="AngularEquilibriumPoint2"]
 shape = SubResource( 6 )
@@ -407,4 +446,4 @@ __meta__ = {
 }
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-shape = SubResource( 13 )
+shape = SubResource( 14 )
