@@ -43,4 +43,4 @@ func _physics_process(delta):
 	$Generic6DOFJoint.set("angular_motor_x/target_velocity", direction.x)
 	$Generic6DOFJoint.set("angular_motor_z/target_velocity", direction.z)
 
-	print(target_rot/TAU)
+#	print(target_rot/TAU)

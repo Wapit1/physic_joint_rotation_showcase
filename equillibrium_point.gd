@@ -27,22 +27,22 @@ func _ready():
 func _physics_process(delta):
 	if Input.is_action_pressed("ui_up"):
 		target_rot += Vector3((-delta),0,0)
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 	if Input.is_action_pressed("ui_down"):
 		target_rot += Vector3(delta,0,0)
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 	if Input.is_action_pressed("ui_left"):
 		target_rot += Vector3(0,-delta,0)
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 	if Input.is_action_pressed("ui_right"):
 		target_rot += Vector3(0,delta,0)
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 	if Input.is_action_pressed("ui_high"):
 		target_rot += Vector3(0,0,delta)
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 	if Input.is_action_pressed("ui_low"):
 		target_rot += Vector3(0,0,-delta)
-		print(target_rot/TAU)
+#		print(target_rot/TAU)
 	
 
 #	if target_rot.x >= 0.44*TAU:
