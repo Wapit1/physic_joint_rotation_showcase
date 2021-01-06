@@ -18,58 +18,37 @@ var integral_r   := Vector3.ZERO
 var is_targetting := true
 
 func _physics_process(delta):
-#	target_rot = Vector3.ZERO
-#	if Input.is_action_pressed("ui_up"):
-#		target_rot += Vector3((-delta),0,0)
-##		print(target_rot/TAU)
-#	if Input.is_action_pressed("ui_down"):
-#		target_rot += Vector3(delta,0,0)
-##		print(target_rot/TAU)
-#	if Input.is_action_pressed("ui_left"):
-#		target_rot += Vector3(0,-delta,0)
-##		print(target_rot/TAU)
-#	if Input.is_action_pressed("ui_right"):
-#		target_rot += Vector3(0,delta,0)
-##		print(target_rot/TAU)
-#	if Input.is_action_pressed("ui_high"):
-#		target_rot += Vector3(0,0,delta)
-##		print(target_rot/TAU)
-#	if Input.is_action_pressed("ui_low"):
-#		target_rot += Vector3(0,0,-delta)
-#
-#	if Input.is_action_just_pressed("ui_accept"):
-#		target_rot =  Vector3.ZERO
+
 #
 	if Input.is_action_just_pressed("ui_focus_next"):
 		is_targetting = !is_targetting
-		
-#	if target_rot.length() >= PI:
-#		target_rot = target_rot.normalized() *PI
+		print(rotation_degrees)
+
 	
 	var correction_to_zero = PID(-angular_velocity,delta,0)
 	add_torque(correction_to_zero)
 	
 	if is_targetting:
 		var target_basis = get_parent().get_node("Direct").transform.basis
-#
-#		target_basis = target_basis.rotated(Vector3(0,1,0),-target_rot.y) 
-#		target_basis = target_basis.rotated(Vector3(1,0,0),-target_rot.x) 
-#		target_basis = target_basis.rotated(Vector3(0,0,1),-target_rot.z) 
-
 		var error_target :Vector3 = - target_basis.z.cross(transform.basis.z)
-		
 		var correction_to_target = PID(error_target,delta,1)
-		
 		add_torque(correction_to_target)
 		
 		
-#		var error_roll : Vector3 = transform.basis.z * (target_basis.get_euler().z - transform.basis.get_euler().z)
+#		
 		var error_roll : Vector3 
-		
-		if target_basis.x.cross(transform.basis.x).z > 0 :
-			error_roll = transform.basis.z * (target_basis.x.cross( transform.basis.x).length())
+		var cross_p_roll :Vector3 = target_basis.x.cross(transform.basis.x)
+		if target_basis.x.x > 0 && target_basis.y.y > 0 || target_basis.z.z > 0:
+#		if true:
+			if cross_p_roll.z > 0 :
+				error_roll = transform.basis.z * - cross_p_roll.length()
+			else:
+				error_roll = transform.basis.z *  cross_p_roll.length()
 		else:
-			error_roll = transform.basis.z * - (target_basis.x.cross( transform.basis.x).length())
+			if cross_p_roll.z > 0 :
+				error_roll = transform.basis.z * cross_p_roll.length()
+			else:
+				error_roll = transform.basis.z * - cross_p_roll.length()
 		add_torque(PID(error_roll,delta,2))
 		
 		
